@@ -101,6 +101,20 @@ blind trial either.
   rules that keep the file greppable. The entries themselves stay in the repository that
   produced them, which is the whole point of the split.
 
+### Third batch: enforcement and measurement (unmeasured, but measuring)
+
+One day of running the method on eight real PRs published seventeen findings and five
+corrections. Five of the seven things that went wrong broke a rule already written in
+SKILL.md. That is the evidence for two additions that add no new checks:
+
+- **The finding card** turns the verification rules into mandatory fields. A blank field
+  or a "reasoned" mechanism does not publish.
+- **The ledger** records, per PR per round, what was published and what was later
+  corrected. Corrections divided by findings is the precision of this method on that
+  codebase; post-merge bugs in a class the findings log already had is its recall against
+  the known. Until the ledger has a few weeks in it, the only measured number here is the
+  16/30 above, and it predates everything after 0.1.0.
+
 ## Honest framing
 
 Use it as a second pass **alongside** an automated reviewer, not instead of one.

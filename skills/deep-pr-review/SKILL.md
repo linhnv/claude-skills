@@ -9,6 +9,12 @@ A defect-hunting review pass for one pull request. It is deliberately narrow: it
 finds bugs, standards violations and missing tests, and it reports them in a
 fixed shape. It does not praise, summarise the diff, or comment on taste.
 
+Its target is not "zero bugs" - the measured rate is about half of what a strong
+commercial reviewer finds. The target is two things that can actually be checked: no
+defect of a class the findings log already names ships, and **every finding published
+is true**. The second failed more often than the first in practice, which is why the
+finding card below exists.
+
 Read `references/provenance.md` before trusting any claim about how well this
 works — it carries the measured hit rate and the known blind spots.
 
@@ -178,6 +184,13 @@ A PR in a stack is not reviewable against the trunk.
 - **A fix for a finding on the parent can land in the child.** The parent then merges with
   the hole open and its description never mentions it. Attribute every fix to the PR that
   actually carries it.
+- **A finding about the ship unit is posted on the ship unit.** Release ordering, what the
+  epic must contain before it merges, which sibling has to land first - these are decisions
+  taken on the epic PR, and a comment on a child is where nobody deciding them will look.
+  Post it there, and leave a one-line pointer on the child you were reviewing.
+  *Case: the most severe finding of a stack - a null guard that had to reach production one
+  release before the relaxation that made nulls possible - was posted on PR five of twelve,
+  while the epic PR that would decide it had no review at all.*
 
 ## Pass 1.7 - Was it already decided?
 
@@ -363,6 +376,34 @@ whether a path is reachable, either prove it from the code or drop the finding.
 
 Report P0 and P1 always. Report P2 only when the failure path is concrete.
 
+## Before publishing - the finding card
+
+Every rule above about verifying is prose, and prose gets skipped under time pressure. In
+one day, five of seven published corrections were for findings that broke a rule already
+written in this file. So the rules are restated here as fields, and **a finding with a blank
+field is not published.** Fill the card before drafting the comment, not after: the card is
+what turns a suspicion into a finding.
+
+```
+Head sha:        <sha> read at <time>       # re-read now, not when you started
+Anchor:          <path>:<line>, in that head's diff, RIGHT side
+Mechanism:       EXECUTED <command and output> | OBSERVED <file:line actually read>
+                 ("reasoned" is not a value - go run it or drop the finding)
+Consumers:       <repo> <branch or PR read>  | none touch this change
+                 (the trunk alone is never enough once a handling PR exists)
+Reachability:    <which shipped client can trigger it> | any HTTP caller (authz, tenancy)
+                 | none - then it is a note in the discussion, not a finding
+Data at stake:   <inventory row> | not in the inventory - asked | n/a
+Already raised:  <reviewer and thread> | no
+Severity:        <label> on <which scale>, the row it lands in and why
+```
+
+Three fields catch most of what went wrong: **Head sha**, because the author fixes things
+while you measure; **Consumers**, because a claim about what a client cannot do is false the
+moment its open branch does it; **Mechanism**, because "the code would 500 here" is a guess
+until the request has been made. Keep the cards in the working notes. They are also what a
+later round compares against.
+
 ## After the review - the findings log
 
 The classes in Pass 2 are generic. What makes the next review on this codebase sharper is
@@ -393,6 +434,24 @@ How to write one, so the file survives:
 - **Never renumber sections.** Entries cross-reference each other by number; a retired
   number stays retired.
 - **Delete entries that stop being true.** An entry nobody can act on is noise.
+
+## After the review - the ledger
+
+The findings log records defects. The ledger records **how the reviewing went**, one line
+per PR per round, in a file the host workflow names:
+
+```
+date | PR | head | published (by severity) | corrections posted | rejected by author and
+accepted | bugs found after merge and which class
+```
+
+Two numbers come out of it, and they are the only honest measure of this method on a given
+codebase: corrections divided by findings (precision - how often what was published was
+wrong), and post-merge bugs in a class the findings log already named (recall against the
+known). `references/provenance.md` gives the rate measured once, before any of the additions;
+the ledger is what says whether the additions helped. A day with seventeen findings and five
+corrections is a 29 percent correction rate, and that is the number to drive down before
+adding another pass.
 
 ## Output contract
 
@@ -501,8 +560,9 @@ End with the prescriptive fix — an imperative, one sentence.>
 Title style: Title Case or sentence case, 3–5 words, names the defect, not the file —
 "Global Cap Is Racy", "Notification can be lost", "Lock loss detected too late".
 
-Body style: third person, present tense, no "you". Describe what the code does, then what
-breaks. Backtick every identifier. No preamble, no restating the diff.
+Body style: present tense; describe what the code does, then what breaks; backtick every
+identifier; no preamble, no restating the diff. Person and register belong to the host
+workflow (Composition) - "we" and a question are fine where the host writes that way.
 
 ### B2. Posting mechanics
 
@@ -555,4 +615,18 @@ check; and the sibling-branch check.
 `<N> files reviewed, <M> comments added` — this line, on this head sha, is the only
 evidence the review actually ran.
 
+
+### D. Approval
+
+The score describes the code. Approval says "this can merge", which depends on things
+outside the diff. Approve only when all four hold, and say which one fails otherwise:
+
+- the score is `5/5` on the current head
+- CI is green on that same head
+- every thread you opened has been answered, and every answer checked
+- for a stacked PR, the base it merges into is not itself blocked by an open finding -
+  approving a child whose parent cannot ship is a signal nobody can act on
+
+Never approve on the host's behalf without being asked: it is an outward act with team
+meaning, and the host workflow owns conduct.
 ---
