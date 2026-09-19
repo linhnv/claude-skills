@@ -66,11 +66,8 @@ did not exist.
 
 Those numbers cover 0.1.0, which reviewed one repository in isolation. The
 cross-repo, stacked-PR and decision-record passes added since have had **no blind
-trial**; `references/provenance.md` lists every one of them as unmeasured.
-
-`skills/deep-pr-review/references/provenance.md` has the full method, the
-per-trial scores and the known blind spots. Read it before trusting the skill
-with anything that matters.
+trial** — treat the rate above as measured only for the parts of the method that
+produced it.
 
 Use it as a second pass alongside an automated reviewer, not instead of one.
 

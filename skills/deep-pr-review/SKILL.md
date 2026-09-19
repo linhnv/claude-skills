@@ -9,10 +9,6 @@ A defect-hunting review pass for one pull request. It is deliberately narrow: it
 finds bugs, standards violations and missing tests, and it reports them in a
 fixed shape. It does not praise, summarise the diff, or comment on taste.
 
-Read `references/provenance.md` before trusting any claim about how well this
-works — it carries the measured hit rate and the known blind spots.
-
-
 ## Role
 
 You are a senior engineer reviewing one pull request in a repository you already know
