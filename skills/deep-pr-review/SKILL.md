@@ -24,8 +24,8 @@ the second code path with the same race, the recovery branch nobody wrote.
 
 This is the defect hunt, and it keeps its own output contract: a summary comment carrying
 the confidence score and the diagram, plus one inline comment per finding, anchored at the
-line, with a `suggestion` block wherever the fix is a small unambiguous edit. Where a host
-workflow (here, the `pr-review` skill) also has rules, they split like this.
+line, with a `suggestion` block wherever the fix is a small unambiguous edit. Where an
+installed host PR workflow also has rules, they split like this.
 
 **This skill owns the shape of the report.** Confidence score, 3-5 word titles, mechanism
 then consequence then fix, the mermaid diagram, the inline anchoring, the status-check line.
@@ -483,11 +483,12 @@ Run them anyway - that is how the right to assert things is earned - but keep th
 the working discussion. The exception is a local run that shows what CI does not: a failure
 CI missed, or a probe whose output IS the evidence for a finding.
 
-**Individual commits and their shas.** Review the final state of the branch. "The last
-commit does X", "`f12c320` removed Y" - the author rebases or squashes and the reference
-rots, and it reads as an audit of how they worked rather than of what the branch does. Phrase
-every point against the code as it stands. The exception is the base-branch and
-sibling-branch checks, where the commit itself is the subject.
+**A commit as the subject of a finding.** Review the final state of the branch. "The last
+commit does X", "`f12c320` removed Y" - the author rebases or squashes and the reference rots,
+and it reads as an audit of how they worked rather than of what the branch does. Phrase every
+finding against the code as it stands. Three uses of a sha are right and stay: the head-sha
+footer of the summary comment, which is what makes two rounds comparable; the base-branch
+check; and the sibling-branch check.
 
 ### C. Status check
 
