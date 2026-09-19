@@ -105,6 +105,12 @@ An API repository is one half of a contract. The defect that reaches production 
 sits in the half nobody opened. Run this for every changed response field, request
 parameter, nullability, enum, unit and status code.
 
+**Before reading a single consumer, find the branch each one is implementing this change
+on.** Search each consumer's repository for the ticket or epic key and list the open PRs.
+Do this first, not after: a consumer's trunk is the state before the work, so reading it
+while a branch exists produces a finding that is false about the code and true only about
+timing, and the title you give it will be wrong.
+
 1. **Find the consumers, then read them.** Locate the companion checkouts - web front,
    mobile, export service, any viewer - and grep for the field and for the path segment.
    A type declaration is not the answer: **the crash is at the dereference.** Read the
@@ -118,9 +124,12 @@ parameter, nullability, enum, unit and status code.
    whole list for that order, not one row.*
 2. **Check the consumer's `develop` AND the branch that handles the change.** A field
    handled in an open PR is not handled in production. Say which branch you checked, and
-   turn "handled in an open PR" into an explicit release-ordering constraint. This bites
-   hardest for a consumer inside the same repository, where the branch in front of you looks
-   like the whole truth.
+   turn "handled in an open PR" into an explicit release-ordering constraint. **Once you
+   know which PR handles it, the trunk proves nothing except the ordering.** Read that PR's
+   branch and report what it actually does; a finding that says the consumer cannot handle
+   the change, when its open branch handles it correctly, is wrong twice - about the
+   consumer and about the severity. This bites hardest for a consumer inside the same
+   repository, where the branch in front of you looks like the whole truth.
    *Case: a review published "the Lambda has no filename dedupe" from one PR of a stack,
    while the sibling PR added that exact dedupe to that exact loop. One `git diff` away.*
 3. **Read the consumer's WRITE path, not only its parse path.** What the client sends back
