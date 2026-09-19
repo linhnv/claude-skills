@@ -26,23 +26,34 @@ What it does differently from asking for "a code review":
 
 ### Install
 
-```bash
-git clone git@github.com:linhnv/claude-skills.git
-cp -R claude-skills/skills/deep-pr-review ~/.claude/skills/
+```
+/plugin marketplace add linhnv/claude-skills
+/plugin install deep-pr-review@claude-skills
 ```
 
-Then in Claude Code:
+The repo is private, so the first command needs git access to it (an authenticated
+`gh` or an SSH key already works).
+
+Then, in any session:
 
 ```
 /deep-pr-review 1234        # a PR number
 /deep-pr-review             # the current diff
 ```
 
-To keep it updated in place, symlink instead of copying:
+Cost: about 150 tokens always-on, ~4.9k when the skill actually fires.
+
+<details>
+<summary>Without the plugin system</summary>
 
 ```bash
+git clone git@github.com:linhnv/claude-skills.git
 ln -s "$PWD/claude-skills/skills/deep-pr-review" ~/.claude/skills/deep-pr-review
 ```
+
+Do not do both — a personal copy in `~/.claude/skills/` and the installed plugin
+are two separate registrations of the same skill.
+</details>
 
 ### How well it works
 

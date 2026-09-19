@@ -1,0 +1,10 @@
+{
+  "name": "deep-pr-review",
+  "version": "0.1.0",
+  "description": "A defect-hunting review pass for one pull request: whole-repo context, a clause-by-clause walk over the repository's own written standards, a hard filter that drops findings without a concrete failure path, and a fixed output contract. Ships its measured hit rate and blind spots.",
+  "author": {
+    "name": "linhnv"
+  },
+  "license": "MIT",
+  "keywords": ["code-review", "pull-request", "static-analysis", "quality", "testing"]
+}
