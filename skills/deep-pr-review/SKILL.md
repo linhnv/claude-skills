@@ -308,7 +308,7 @@ Drop, without mentioning them:
 
 - Anything with no concrete failure path (style, naming, taste, "consider extracting").
 - Anything already true on `main` and untouched by this diff.
-- Hardening whose failure path needs a hostile or impossible caller.
+- Hardening whose failure path needs an impossible caller - hostile is not impossible.
 - Duplicates: one finding per defect. Merge two locations into one finding only when it is
   the SAME defect with the same consequence and the same severity; when they differ — a
   missing event is P1, an undercounted metric is P2 — file them separately, or the more
@@ -320,7 +320,11 @@ Drop, without mentioning them:
   discussion with whoever asked for the review, not in the published comment.
 - **A finding the consumer already makes unreachable.** Before filing "a caller can do X",
   check whether the only caller's own validation prevents X. A server-side hole no client
-  can reach is a hardening note, not a defect.
+  can reach is a hardening note, not a defect. Neither this rule nor the one about an
+  impossible caller crosses a trust boundary: for authorization, tenancy and anything that
+  arrives over the network the reachable set is whatever can speak HTTP, not the client in
+  the repository next door, and validation in that client proves nothing about the server.
+  A missing guard is a finding at the severity Pass 4 gives it.
 - **Any gate you cannot measure from this PR.** Do not assert a coverage percentage, a
   complexity number or a build-time target unless you have confirmed the tool that produces
   it is enabled and reports on pull requests. (Case: a written standard demanded 80 percent
