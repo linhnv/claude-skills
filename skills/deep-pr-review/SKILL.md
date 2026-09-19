@@ -380,11 +380,12 @@ How to write one, so the file survives:
 
 ## Output contract
 
-### A. Summary comment (one per round, posted new — never edited in place)
+### A. Summary (one per round, in that round's review body — never edited in place)
 
-Each round gets its own summary comment and the earlier ones stay. They are the record of
-what was open when, which an edited-in-place comment destroys; the footer's round number
-and head sha are what tie each one to the code it was written against.
+Each round gets its own summary and the earlier ones stay. They are the record of what was
+open when, which an edited-in-place comment destroys; the footer's round number and head sha
+are what tie each one to the code it was written against. It rides in the `body` of the
+review that carries that round's inline comments (B2).
 
 ```
 ## Confidence Score: <N>/5
@@ -481,15 +482,15 @@ breaks. Backtick every identifier. No preamble, no restating the diff.
 
 ### B2. Posting mechanics
 
-One review, not N standalone comments: send every inline comment as the `comments` array of
-a single review, so they land together and the summary can link them. Build the request as
-JSON and pass it with `--input`; the `key=value` field form cannot express an array of
-objects.
+**One call per round.** The review carries the summary in `body` and every finding in
+`comments`, so a round is one entity and one notification. Build the request as JSON and
+pass it with `--input`; the `key=value` field form cannot express an array of objects.
 
 ```bash
 cat > review.json <<'JSON'
 {
   "event": "COMMENT",
+  "body": "## Confidence Score: 4/5\n\n<the summary>",
   "comments": [
     { "path": "app/models/thing.rb", "line": 42, "side": "RIGHT",
       "body": "[P1] **Title Goes Here**\n\n<mechanism, consequence, fix>" }
@@ -499,11 +500,16 @@ JSON
 gh api repos/<owner>/<repo>/pulls/<n>/reviews -X POST --input review.json
 ```
 
+**Link a finding only when its thread already exists.** A finding raised in this round sits
+in the same review block the summary heads, so it is referenced as `path:line` and a link
+would only point back at itself. A finding carried over from an earlier round already has a
+thread, so link that. This is why the summary can ship in the same call: nothing in a first
+round needs a URL that the call itself is about to create.
+
 Every anchor line must exist in the diff of the head being reviewed, on the side named, or
-the whole call 422s and nothing is posted - re-read the head sha first, then anchor. Post the
-summary separately with `gh pr comment <n> --body-file <file>`, and post it *after* the
-review, so it can link the threads it names. Every later round posts another one; leave the
-earlier summaries standing rather than patching one of them.
+the whole call 422s and nothing is posted - re-read the head sha first, then anchor. Every
+later round posts another review the same way; leave the earlier ones standing rather than
+editing one of them.
 
 ### B3. Two things never to publish
 
