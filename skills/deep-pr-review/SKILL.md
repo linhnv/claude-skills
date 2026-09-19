@@ -376,7 +376,11 @@ How to write one, so the file survives:
 
 ## Output contract
 
-### A. Summary comment (one per PR, edited in place on every later round)
+### A. Summary comment (one per round, posted new — never edited in place)
+
+Each round gets its own summary comment and the earlier ones stay. They are the record of
+what was open when, which an edited-in-place comment destroys; the footer's round number
+and head sha are what tie each one to the code it was written against.
 
 ```
 ## Confidence Score: <N>/5
@@ -471,9 +475,9 @@ gh api repos/<owner>/<repo>/pulls/<n>/reviews -X POST --input review.json
 
 Every anchor line must exist in the diff of the head being reviewed, on the side named, or
 the whole call 422s and nothing is posted - re-read the head sha first, then anchor. Post the
-summary separately with `gh pr comment <n> --body-file <file>`, and on later rounds edit that
-same summary in place (`gh api -X PATCH repos/<owner>/<repo>/issues/comments/<id>`) rather
-than adding a second one.
+summary separately with `gh pr comment <n> --body-file <file>`, and post it *after* the
+review, so it can link the threads it names. Every later round posts another one; leave the
+earlier summaries standing rather than patching one of them.
 
 ### B3. Two things never to publish
 
