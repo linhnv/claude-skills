@@ -41,7 +41,7 @@ Then, in any session:
 /deep-pr-review             # the current diff
 ```
 
-Cost: about 150 tokens always-on, ~4.9k when the skill actually fires.
+Cost: about 210 tokens always-on, ~10.5k when the skill actually fires.
 
 <details>
 <summary>Without the plugin system</summary>
@@ -63,6 +63,10 @@ commercial AI code reviewer on real pull requests, scored after the fact.
 violations, 0/2 test-quality gaps. It also produced about a dozen findings the
 reference reviewer did not raise, and once published a finding whose mechanism
 did not exist.
+
+Those numbers cover 0.1.0, which reviewed one repository in isolation. The
+cross-repo, stacked-PR and decision-record passes added since have had **no blind
+trial**; `references/provenance.md` lists every one of them as unmeasured.
 
 `skills/deep-pr-review/references/provenance.md` has the full method, the
 per-trial scores and the known blind spots. Read it before trusting the skill
