@@ -9,11 +9,9 @@ A defect-hunting review pass for one pull request. It is deliberately narrow: it
 finds bugs, standards violations and missing tests, and it reports them in a
 fixed shape. It does not praise, summarise the diff, or comment on taste.
 
-Its target is not "zero bugs" - the measured rate is about half of what a strong
-commercial reviewer finds. The target is two things that can actually be checked: no
-defect of a class the findings log already names ships, and **every finding published
-is true**. The second failed more often than the first in practice, which is why the
-finding card below exists.
+Two things it holds itself to, because both can be checked: no defect of a class the
+findings log already names ships, and **every finding published is true**. The finding
+card below exists for the second.
 
 Read `references/provenance.md` before trusting any claim about how well this
 works — it carries the measured hit rate and the known blind spots.
