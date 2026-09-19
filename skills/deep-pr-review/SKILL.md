@@ -451,19 +451,29 @@ breaks. Backtick every identifier. No preamble, no restating the diff.
 
 ### B2. Posting mechanics
 
-One review, not N standalone comments: build the inline comments as the `comments` array of
-a single review so they land together and the summary can link them.
+One review, not N standalone comments: send every inline comment as the `comments` array of
+a single review, so they land together and the summary can link them. Build the request as
+JSON and pass it with `--input`; the `key=value` field form cannot express an array of
+objects.
 
 ```bash
-gh api repos/<owner>/<repo>/pulls/<n>/reviews -X POST -f event=COMMENT \
-  -F 'comments[][path]=app/models/thing.rb' -F 'comments[][line]=42' \
-  -F 'comments[][side]=RIGHT' -F 'comments[][body]=@finding1.md'
+cat > review.json <<'JSON'
+{
+  "event": "COMMENT",
+  "comments": [
+    { "path": "app/models/thing.rb", "line": 42, "side": "RIGHT",
+      "body": "[P1] **Title Goes Here**\n\n<mechanism, consequence, fix>" }
+  ]
+}
+JSON
+gh api repos/<owner>/<repo>/pulls/<n>/reviews -X POST --input review.json
 ```
 
-The line must exist in the diff of the head being reviewed, on the side you name, or the
-call 422s - re-read the head sha first, then anchor. Post the summary with
-`gh pr comment <n> --body-file <file>`, and on later rounds edit that same summary in place
-(`gh api -X PATCH repos/<owner>/<repo>/issues/comments/<id>`) rather than adding a second one.
+Every anchor line must exist in the diff of the head being reviewed, on the side named, or
+the whole call 422s and nothing is posted - re-read the head sha first, then anchor. Post the
+summary separately with `gh pr comment <n> --body-file <file>`, and on later rounds edit that
+same summary in place (`gh api -X PATCH repos/<owner>/<repo>/issues/comments/<id>`) rather
+than adding a second one.
 
 ### B3. Two things never to publish
 
