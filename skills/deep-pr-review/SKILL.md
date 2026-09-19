@@ -398,7 +398,6 @@ and head sha are what tie each one to the code it was written against.
 - <bullet: a behaviour the PR adds or changes>
 - <bullet>
 - <bullet>            <!-- 3–5 bullets, present tense, no file inventory -->
-- <bullet: on a later round, which previous findings are resolved and which remain>
 
 <details open><summary>Diagram</summary>
 
@@ -408,6 +407,29 @@ flowchart TD
   ...
 ```
 </details>
+
+<sub>Reviews (<N>) · Last reviewed commit: <sha link></sub>
+```
+
+**A later round carries the state, not the description.** Re-state in full, every round: the
+confidence score, the complete list of findings **still open**, and the footer. The score is
+defined against the open set, so a reader has to be able to check one against the other in
+the comment they are looking at - a round that lists only what is new leaves the current
+state written down nowhere. What the PR does and the diagram are description: they belong to
+the first round and are re-posted only when the branch changes what they describe. Add one
+line for what the previous round found and the author has since fixed, and name what proves
+it - not the commit message.
+
+```
+## Confidence Score: <N>/5
+
+<One sentence: merge or not, and why, naming the outstanding findings if any.>
+
+**Fixed since round <N-1>:** <titles> - <what proves each one, checked, not taken on trust>.
+
+## Findings                 <!-- every finding still open, not only the new ones -->
+
+1. [P1] **<Three To Five Word Title>** <link to the inline thread>
 
 <sub>Reviews (<N>) · Last reviewed commit: <sha link></sub>
 ```
@@ -422,7 +444,7 @@ flowchart TD
 - `0–1/5` — critical problems.
 
 The score is a function of **open** findings, not of findings ever raised. A finding the
-author fixes moves the score up on the next round and is named as resolved in the bullets.
+author fixes moves the score up on the next round and is named on that round's Fixed line.
 
 **Diagram rules:** mermaid, always prefixed `%%{init: {'theme': 'neutral'}}%%`.
 `flowchart` for a control/decision path, `sequenceDiagram` for a multi-actor exchange.
