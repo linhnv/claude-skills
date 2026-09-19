@@ -55,19 +55,17 @@ Do not do both — a personal copy in `~/.claude/skills/` and the installed plug
 are two separate registrations of the same skill.
 </details>
 
-### How well it works
+### What it misses
 
-It was measured, not assumed: nine blind trials against the findings of a
-commercial AI code reviewer on real pull requests, scored after the fact.
-**16 of 30** findings matched — 12/20 runtime defects, 4/8 standards
-violations, 0/2 test-quality gaps. It also produced about a dozen findings the
-reference reviewer did not raise, and once published a finding whose mechanism
-did not exist.
+Known from using it, and not fixed by any of the passes added since:
 
-Those numbers cover 0.1.0, which reviewed one repository in isolation. The
-cross-repo, stacked-PR and decision-record passes added since have had **no blind
-trial** — treat the rate above as measured only for the parts of the method that
-produced it.
+- **Test quality.** A loose mock expectation or a captured-but-unasserted value gets
+  read, written into the working notes, and then dropped as "too weak".
+- **Small diffs.** Steps already in the method — read the callers, walk every
+  standards clause, check the PR is still open — get skipped when a diff looks
+  self-contained. More rules do not fix that.
+- **It has been wrong in public.** A finding was once published whose mechanism did
+  not exist, because a truncated `grep` hid the migration that had removed it.
 
 Use it as a second pass alongside an automated reviewer, not instead of one.
 
