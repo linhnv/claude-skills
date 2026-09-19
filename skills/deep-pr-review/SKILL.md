@@ -108,14 +108,21 @@ parameter, nullability, enum, unit and status code.
 1. **Find the consumers, then read them.** Locate the companion checkouts - web front,
    mobile, export service, any viewer - and grep for the field and for the path segment.
    A type declaration is not the answer: **the crash is at the dereference.** Read the
-   mapping and rendering code, not the type file.
+   mapping and rendering code, not the type file. A consumer does not have to be a separate
+   checkout: a Lambda, worker or package living beside the producer in the same repository
+   reads the same payload and counts here - and in a stack it has a branch of its own, so
+   the next point applies to it too.
    *Case: an API change made `client` nullable on a confirmer row. The web type said
    `client: { id: number; name: string }` with no `| null`, and the response mapper called
    `r.client.id.toString()` unguarded - one such row throws while mapping and takes out the
    whole list for that order, not one row.*
 2. **Check the consumer's `develop` AND the branch that handles the change.** A field
    handled in an open PR is not handled in production. Say which branch you checked, and
-   turn "handled in an open PR" into an explicit release-ordering constraint.
+   turn "handled in an open PR" into an explicit release-ordering constraint. This bites
+   hardest for a consumer inside the same repository, where the branch in front of you looks
+   like the whole truth.
+   *Case: a review published "the Lambda has no filename dedupe" from one PR of a stack,
+   while the sibling PR added that exact dedupe to that exact loop. One `git diff` away.*
 3. **Read the consumer's WRITE path, not only its parse path.** What the client sends back
    decides whether the change is safe, and it is the fastest way to settle a disputed
    finding in either direction.
