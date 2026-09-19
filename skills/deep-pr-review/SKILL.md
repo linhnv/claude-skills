@@ -455,17 +455,25 @@ it - not the commit message.
 <sub>Reviews (<N>) · Last reviewed commit: <sha link></sub>
 ```
 
-**Confidence score, calibrated against observed behaviour:**
+**Confidence score, by the severity of what is still open - not by how many:**
 
-- `5/5` — no open finding. Wording: "The PR appears safe to merge; …".
-- `4/5` — one open P1 with a bounded blast radius. Wording: "The PR should not merge
-  until <the one condition> …".
-- `2/5` — several open findings carried across rounds. Wording: "The PR does not appear
+- `5/5` - nothing open, or only the lowest severity left. Wording: "The PR appears safe to
+  merge; …".
+- `4/5` - something open that has a workaround or needs specific conditions. Wording: "The
+  PR should not merge until <the one condition> …".
+- `3/5` - one open defect that produces a wrong result, lost work or a crash.
+- `2/5` - several open findings carried across rounds. Wording: "The PR does not appear
   safe to merge because <N> previously reported defects remain unresolved."
-- `0–1/5` — critical problems.
+- `0-1/5` - a security hole, data corruption, or work becoming impossible.
 
-The score is a function of **open** findings, not of findings ever raised. A finding the
-author fixes moves the score up on the next round and is named on that round's Fixed line.
+Grade by severity because counting punishes a clean PR that collected two nits: a review
+with nothing but the mildest findings is a `5/5` and should say so, and one open defect that
+loses work is not rescued by being alone. The score is a function of **open** findings, not
+of findings ever raised. A finding the author fixes moves the score up on the next round and
+is named on that round's Fixed line.
+
+Where the host workflow defines its own severity labels, map to those and say which scale
+the score is using.
 
 **Diagram rules:** mermaid, always prefixed `%%{init: {'theme': 'neutral'}}%%`.
 `flowchart` for a control/decision path, `sequenceDiagram` for a multi-actor exchange.
