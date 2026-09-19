@@ -41,7 +41,7 @@ Then, in any session:
 /deep-pr-review             # the current diff
 ```
 
-Cost: about 220 tokens always-on, ~10k when the skill actually fires.
+Cost: about 210 tokens always-on, ~10.5k when the skill actually fires.
 
 <details>
 <summary>Without the plugin system</summary>
