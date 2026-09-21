@@ -537,6 +537,14 @@ the score is using.
 5–10 nodes. Node labels are domain actions ("Persist pending trigger"), never function
 or class names. Draw the mechanism the PR changes, not the whole system.
 
+**The diagram is required on the round that describes the PR**, normally the first. Skip it
+only when the mechanism this PR changes would draw fewer than 5 nodes, which is the same bar
+as the range above: a one-line filter or a renamed constant does not earn a picture, and
+forcing one turns the contract into ceremony. When it is skipped, say so and why to whoever
+asked for the review, and **never in the published comment** - that is bookkeeping about the
+review, like the status-check line in C. Dropping the diagram silently, with the reason left
+in your head, is the failure this paragraph exists to stop.
+
 ### B. Inline comment (one per finding, anchored at the exact line)
 
 ```
