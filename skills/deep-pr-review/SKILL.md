@@ -608,10 +608,12 @@ finding against the code as it stands. Three uses of a sha are right and stay: t
 footer of the summary comment, which is what makes two rounds comparable; the base-branch
 check; and the sibling-branch check.
 
-### C. Status check
+### C. Status check - reported, never published
 
-`<N> files reviewed, <M> comments added` — this line, on this head sha, is the only
-evidence the review actually ran.
+`<N> files reviewed, <M> comments added`, on this head sha, is the accounting that says
+the review actually ran. **It does not go in the published comment.** It is bookkeeping
+about the review, not about the code: the author cannot act on it, and it pushes the
+findings down the page. Give it to whoever asked for the review, and to the ledger.
 
 
 ### D. Approval
